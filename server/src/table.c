@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include"SLL.h"
+#include"../lib/SLL.h"
 #include<stdarg.h>
 #include<string.h>
 
