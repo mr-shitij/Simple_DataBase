@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include"../lib/SLL.h"
 
-SLL* Init_List() {
+SLL* initList() {
 	SLL *singly = (SLL *)malloc(sizeof(SLL));
 	singly->head = NULL;
 	return singly;
@@ -59,10 +59,9 @@ void assignDataToMemory(const char type, size_t data_size, void *newNode, void *
 			printf("\n Invalid Type");
 			exit(1);
 	}
-
 }
 
-void InsertAtFirst(SLL *list, const char type, void *data, unsigned int n) {
+void insertAtFirst(SLL *list, const char type, void *data, unsigned int n) {
 	Node *newNode = (Node *) malloc(sizeof(Node));
 	if(newNode == NULL) {
 		printf("\n Overflow ..!!");
@@ -70,6 +69,7 @@ void InsertAtFirst(SLL *list, const char type, void *data, unsigned int n) {
 	}
 	size_t dataSize = getDataTypeSize(type);
 	newNode->type = type;
+	newNode->size = dataSize;
 	newNode->data = malloc(dataSize * n);
 	newNode->next = NULL;
 
@@ -87,7 +87,7 @@ void InsertAtFirst(SLL *list, const char type, void *data, unsigned int n) {
 	}
 }
 
-void InsertAtLast(SLL *list, const char type, void *data, unsigned int n) { // add to last
+void insertAtLast(SLL *list, const char type, void *data, unsigned int n) { // add to last
 	Node *newNode = (Node *) malloc(sizeof(Node));
 	if(newNode == NULL) {
 		printf("\n Overflow ..!!");
@@ -95,6 +95,7 @@ void InsertAtLast(SLL *list, const char type, void *data, unsigned int n) { // a
 	}
 	size_t dataSize = getDataTypeSize(type);
 	newNode->type = type;
+	newNode->size = dataSize;
 	newNode->data = malloc(dataSize * n);
 	newNode->next = NULL;
 
@@ -113,7 +114,7 @@ void InsertAtLast(SLL *list, const char type, void *data, unsigned int n) { // a
 	}
 }
 
-void RemoveFromLast(SLL *list) {
+void removeFromLast(SLL *list) {
 	if(list->head == NULL) {
 		printf("List is empty ..!!");
 		return;
@@ -136,7 +137,7 @@ void RemoveFromLast(SLL *list) {
 	}
 }
 
-void RemoveFromFirst(SLL *list) {
+void removeFromFirst(SLL *list) {
 	if(list->head == NULL) {
 		printf("List is empty ..!!");
 		return;
@@ -189,16 +190,6 @@ void printBasedOnData(const char type, void *data) {
 	else if(type == 's') {
 		printString(data);
 	}
-
-}
-
-void PrintColums(SLL *list) {
-	Node *temp = list->head;
-	while(temp != NULL) {
-		printBasedOnData('s', temp->data);
-		printf("\t");
-		temp = temp->next;
-	}	
 }
 
 void Traverse(SLL *list) {
@@ -209,20 +200,34 @@ void Traverse(SLL *list) {
 	}	
 }
 
-void getNode(SLL *list, unsigned int index) {
+Node* getNodeFromRow(SLL *list, unsigned int index) {
 	Node *temp = list->head;
 	while(index != 0) {
 		temp = temp->next;
 		index --;
 	}
-
-	printf("\nDATA : ");
-	printBasedOnData(temp->type, temp->data);
-	printf("\n");
-
+	return temp;
 }
 
-void Search(SLL *list, int data) {
+TableRow* getRowFromColum(Table *table, unsigned int index) {
+	TableRow *tableRow = table->tableRow->next;
+	while(index != 0){
+		tableRow = tableRow->next;
+	}
+	return tableRow;
+}
+
+void updateNode(Table *table, const char type, int rowIndex, int colIndex, void *data) {
+	if(type != table->columsDataTypes[rowIndex])
+		return;
+
+	TableRow *tableRow = getRowFromColum(table, colIndex);
+	Node *node = getNodeFromRow(tableRow->row, rowIndex);
+	assignDataToMemory(node->type, node->size, node->data, data);
+}
+
+
+void search(SLL *list, int data) {
 	Node *temp = list->head;
 	
 	while(temp != NULL) {
@@ -233,3 +238,4 @@ void Search(SLL *list, int data) {
 		temp = temp->next;
 	}	
 }
+

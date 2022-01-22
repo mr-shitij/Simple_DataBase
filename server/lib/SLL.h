@@ -1,21 +1,34 @@
 typedef struct Node {
 	void *data;
 	char type;
+	size_t size;
 	struct Node *next;
 } Node;
 
 typedef struct SLL {
 	Node *head;
-//	int totalNodes;
-//	int maxNodes;
 }SLL;
 
-SLL* Init_List();
-void InsertAtFirst(SLL *list, const char type, void *data, unsigned int n);
-void InsertAtLast(SLL *list, const char type, void *data, unsigned int n);
-void RemoveFromFirst(SLL *list);
-void RemoveFromLast(SLL *list);
-void Traverse(SLL *list);
-void Search(SLL *list, int data);
-void getNode(SLL *list, unsigned int index);
+SLL* initList();
+void insertAtFirst(SLL *list, const char type, void *data, unsigned int n);
+void insertAtLast(SLL *list, const char type, void *data, unsigned int n);
+void removeFromFirst(SLL *list);
+void removeFromLast(SLL *list);
+void traverse(SLL *list);
+void search(SLL *list, int data);
+
+Node* getNodeFromRow(SLL *list, unsigned int index);
+TableRow* getRowFromColum(Table *table, unsigned int index);
+void updateNode(Table *table, const char type, int rowIndex, int colIndex, void *data);
+
+size_t getDataTypeSize(const char type);
+void assignDataToMemory(const char type, size_t data_size, void *newNode, void *new_data);
+
+void printInt(void *n);
+void printChar(void *n);
+void printString(void *n);
+void printFloat(void *f);
+void printDouble(void *n);
+void printBasedOnData(const char type, void *data);
+
 

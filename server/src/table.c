@@ -9,14 +9,14 @@ typedef struct TableRow {
 	struct TableRow *next;
 }TableRow;
 
-typedef struct Table{
+typedef struct Table {
 	TableRow *tableRow;
 	char *columsDataTypes;
 }Table;
 
 TableRow* tableRowInit() {
 	TableRow *tableRow = (TableRow*) malloc(sizeof(TableRow *));
-	tableRow->row = Init_List();
+	tableRow->row = initList();
 	return tableRow;
 }
 
@@ -31,7 +31,7 @@ Table* tableInit(const char *dataType, ...) {
 
 	while(*dataType != '\0') {
 		char *val = va_arg(valist, char *);
-		InsertAtLast(table->tableRow->row, *dataType, val, strlen(val));
+		insertAtLast(table->tableRow->row, *dataType, val, strlen(val));
 
 		dataType++;
 	}
@@ -63,56 +63,61 @@ void insertRow(Table *table, const char *dataType, ...) {
 	while(*dataType != '\0') {
 		if(*dataType == 'i') {
 			int val = va_arg(valist, int);
-			InsertAtLast(iterator->next->row, *dataType, &val, 1);	
+			insertAtLast(iterator->next->row, *dataType, &val, 1);
 		}
 		else if(*dataType == 'f') {
 			float val = va_arg(valist, float);
-			InsertAtLast(iterator->next->row, *dataType, &val, 1);	
+			insertAtLast(iterator->next->row, *dataType, &val, 1);
 		}
 		else if(*dataType == 'c') {
 			char *val = va_arg(valist, char*);
-			InsertAtLast(iterator->next->row, *dataType, val, 1);	
+			insertAtLast(iterator->next->row, *dataType, val, 1);
 		}
 		else if(*dataType == 'd') {
 			double val = va_arg(valist, double);
-			InsertAtLast(iterator->next->row, *dataType, &val, 1);	
+			insertAtLast(iterator->next->row, *dataType, &val, 1);
 		}
 		else if(*dataType == 's') {
 			char *val = va_arg(valist, char *);
-			InsertAtLast(iterator->next->row, *dataType, val, strlen(val));
+			insertAtLast(iterator->next->row, *dataType, val, strlen(val));
 		}
 		dataType++;
 	}
-
-	va_end(valist);	
+	va_end(valist);
 }
+
+void showColum(Table *table, int index) {
+	TableRow *tableRow = table->tableRow->next;
+	while(tableRow != NULL){
+		Node *temp = getNodeFromRow(tableRow->row, index);
+		printBasedOnData(temp->type, temp->data);
+		tableRow = tableRow->next;
+		printf("\n");
+	}
+}
+
+void printColums(Table *table) {
+	Node *temp = table->tableRow->row->head;
+	while(temp != NULL) {
+		printString(temp->data);
+		printf("\t");
+		temp = temp->next;
+	}	
+}
+
 
 int main() {
-
-	Table *table = tableInit("sii", "Name", "Age", "Phone NO");
-	PrintColums(table->tableRow->row);
+	Table *table = tableInit("sii", "Name", "Age", "Phone No");
+	printColums(table);
 
 	printf("\n\n");
-
 	insertRow(table, "sii", "Sanskar", 19, 1234567890);
-	insertRow(table, "sii", "Shitij", 19, 987654321);
-	Traverse(table->tableRow->next->row);
-	printf("\n\n");
-	Traverse(table->tableRow->next->next->row);
-	printf("\n\n");
 
-/*
-	getNode(table->tableRow->row, 0);
-	getNode(table->tableRow->row, 1);
-	getNode(table->tableRow->row, 2);
-*/
+	printf("\n\n");
+	insertRow(table, "sii", "Shitij", 19, 987654321);
+
+	showColum(table, 0);
+	showColum(table, 1);
 	return 0;
 }
-
-
-
-
-
-
-
 
