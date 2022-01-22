@@ -86,6 +86,23 @@ void insertRow(Table *table, const char *dataType, ...) {
 	va_end(valist);
 }
 
+Node* getNodeFromRow(SLL *list, unsigned int index) {
+	Node *temp = list->head;
+	while(index != 0) {
+		temp = temp->next;
+		index --;
+	}
+	return temp;
+}
+
+TableRow* getRowFromColum(Table *table, unsigned int index) {
+	TableRow *tableRow = table->tableRow->next;
+	while(index != 0){
+		tableRow = tableRow->next;
+	}
+	return tableRow;
+}
+
 void showColum(Table *table, int index) {
 	TableRow *tableRow = table->tableRow->next;
 	while(tableRow != NULL){
@@ -96,6 +113,21 @@ void showColum(Table *table, int index) {
 	}
 }
 
+void updateNode(Table *table, const char type, int rowIndex, int colIndex, void *data) {
+	if(type != table->columsDataTypes[rowIndex])
+		return;
+
+	TableRow *tableRow = getRowFromColum(table, colIndex);
+	Node *node = getNodeFromRow(tableRow->row, rowIndex);
+	assignDataToMemory(node->type, node->size, node->data, data);
+}
+
+void getNode(Table *table, int rowIndex, int colIndex) {
+	TableRow *tableRow = getRowFromColum(table, colIndex);
+	Node *node = getNodeFromRow(tableRow->row, rowIndex);
+	printBasedOnData(node->type, node->data);
+}
+
 void printColums(Table *table) {
 	Node *temp = table->tableRow->row->head;
 	while(temp != NULL) {
@@ -104,7 +136,6 @@ void printColums(Table *table) {
 		temp = temp->next;
 	}	
 }
-
 
 int main() {
 	Table *table = tableInit("sii", "Name", "Age", "Phone No");
@@ -118,6 +149,10 @@ int main() {
 
 	showColum(table, 0);
 	showColum(table, 1);
+
+	getNode(table, 0, 0);
+	getNode(table, 1, 0);
+
 	return 0;
 }
 
