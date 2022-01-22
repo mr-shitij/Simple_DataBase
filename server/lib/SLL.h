@@ -17,10 +17,6 @@ void removeFromLast(SLL *list);
 void traverse(SLL *list);
 void search(SLL *list, int data);
 
-Node* getNodeFromRow(SLL *list, unsigned int index);
-TableRow* getRowFromColum(Table *table, unsigned int index);
-void updateNode(Table *table, const char type, int rowIndex, int colIndex, void *data);
-
 size_t getDataTypeSize(const char type);
 void assignDataToMemory(const char type, size_t data_size, void *newNode, void *new_data);
 

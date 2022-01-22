@@ -200,33 +200,6 @@ void Traverse(SLL *list) {
 	}	
 }
 
-Node* getNodeFromRow(SLL *list, unsigned int index) {
-	Node *temp = list->head;
-	while(index != 0) {
-		temp = temp->next;
-		index --;
-	}
-	return temp;
-}
-
-TableRow* getRowFromColum(Table *table, unsigned int index) {
-	TableRow *tableRow = table->tableRow->next;
-	while(index != 0){
-		tableRow = tableRow->next;
-	}
-	return tableRow;
-}
-
-void updateNode(Table *table, const char type, int rowIndex, int colIndex, void *data) {
-	if(type != table->columsDataTypes[rowIndex])
-		return;
-
-	TableRow *tableRow = getRowFromColum(table, colIndex);
-	Node *node = getNodeFromRow(tableRow->row, rowIndex);
-	assignDataToMemory(node->type, node->size, node->data, data);
-}
-
-
 void search(SLL *list, int data) {
 	Node *temp = list->head;
 	
