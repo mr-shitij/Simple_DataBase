@@ -5,6 +5,34 @@
 #include<stdarg.h>
 #include<string.h>
 
+Table* open(char *fileName) {
+	return 0;
+}
+
+void save(Table *table) {
+	FILE *filePointer;
+	filePointer = fopen("storage", "w") ;
+	if ( filePointer == NULL ) {
+		printf( "storage file failed to open." ) ;
+
+	}
+	else {
+		fputs("", filePointer);
+		/*
+		for(int i=0; i < table->rows; i++) {
+			for(int j=0; j < table->colums; j++) {
+				Node *node = getNode(table, i, j);
+
+			}
+
+		}
+		*/
+		fclose(filePointer);
+
+	}
+
+}
+
 TableRow* tableRowInit() {
 	TableRow *tableRow = (TableRow*) malloc(sizeof(TableRow *));
 	tableRow->row = initList();
@@ -13,6 +41,8 @@ TableRow* tableRowInit() {
 
 Table* tableInit(const char *dataType, ...) {
 	Table *table = (Table *) malloc(sizeof(Table *));
+	table->rows = 0;
+	table->colums = 0;
 	table->tableRow = tableRowInit();
 	table->columsDataTypes = (char *) malloc(sizeof(char *) * strlen(dataType));
 	strcpy(table->columsDataTypes, dataType);
@@ -24,6 +54,7 @@ Table* tableInit(const char *dataType, ...) {
 		char *val = va_arg(valist, char *);
 		insertAtLast(table->tableRow->row, *dataType, val, strlen(val));
 
+		table->colums = table->colums + 1;
 		dataType++;
 	}
 
@@ -50,6 +81,7 @@ void insertRow(Table *table, const char *dataType, ...) {
 	}
 
 	iterator->next = tableRowInit();
+	table->rows = table->rows + 1;
 
 	while(*dataType != '\0') {
 		if(*dataType == 'i') {
@@ -90,6 +122,7 @@ TableRow* getRowFromColum(Table *table, unsigned int index) {
 	TableRow *tableRow = table->tableRow->next;
 	while(index != 0){
 		tableRow = tableRow->next;
+		index--;
 	}
 	return tableRow;
 }
@@ -113,10 +146,10 @@ void updateNode(Table *table, const char type, int rowIndex, int colIndex, void 
 	assignDataToMemory(node->type, node->size, node->data, data);
 }
 
-void getNode(Table *table, int rowIndex, int colIndex) {
+Node* getNode(Table *table, int colIndex, int rowIndex) {
 	TableRow *tableRow = getRowFromColum(table, colIndex);
 	Node *node = getNodeFromRow(tableRow->row, rowIndex);
-	printBasedOnData(node->type, node->data);
+	return node;
 }
 
 void printColums(Table *table) {
