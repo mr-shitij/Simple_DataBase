@@ -72,8 +72,8 @@ void insertAtFirst(SLL *list, const char type, void *data, unsigned int n) {
 	newNode->data = malloc(newNode->size);
 	newNode->next = NULL;
 
-	printf("\n SIZE_N : %zu \n", getDataTypeSize(type));
-	printf("\n N : %d \n", n);
+//	printf("\n SIZE_N : %zu \n", getDataTypeSize(type));
+//	printf("\n N : %d \n", n);
 
 	assignDataToMemory(type, newNode->size, newNode->data, data);
 	
@@ -98,7 +98,7 @@ void insertAtLast(SLL *list, const char type, void *data, unsigned int n) { // a
 	newNode->data = malloc(newNode->size);
 	newNode->next = NULL;
 
-	printf("\n SIZE_N : %zu \n", getDataTypeSize(type));
+//	printf("\n SIZE_N : %zu \n", getDataTypeSize(type));
 	assignDataToMemory(type, newNode->size, newNode->data, data);
 
 	

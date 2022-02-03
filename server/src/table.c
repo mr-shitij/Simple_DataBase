@@ -5,20 +5,37 @@
 #include<stdarg.h>
 #include<string.h>
 
+//
+
 int main() {
-	Table *table = tableInit("sii", "Name", "Age", "Phone_No");
+	printf("p1\n\n");
+	Table *table = open("abc.txt");//tableInit("sii", "Name", "Age", "Phone_No");
+	printf("p2\n\n");
+
+	if(table->tableRow == NULL)
+		printf("Table_ROWS : \n\n");
+	if(table->tableRow->row == NULL)
+		printf("Table_ROWS->row : \n\n");
+
 	printColums(table);
 
-	printf("\n\n p1");
+//	insertRow(table, "sii", "RAM2", 199, 1234567890);
+//	insertRow(table, "sii", "SHAM2", 199, 987654321);
 
+	printf("p3\n\n");
+	showRow(table, 0);
+	printf("p4\n\n");
+	showRow(table, 1);
+	printf("p5\n\n");
 
-	printf("\n\n p2");
-	insertRow(table, "sii", "Sanskar", 19, 1234567890);
+	showRow(table, 2);
+	printf("p6\n\n");
+//	showRow(table, 3);
+//	printf("p7\n\n");
 
-	printf("\n\n p3");
-	insertRow(table, "sii", "Shitij", 19, 987654321);
+//	save(table, "abc.txt");
+/*
 
-	save(table);
 	showColum(table, 0);
 	showColum(table, 1);
 
@@ -42,6 +59,7 @@ int main() {
 
 //	getNode(table, 0, 0);
 //	getNode(table, 1, 0);
+*/
 	return 0;
 }
 

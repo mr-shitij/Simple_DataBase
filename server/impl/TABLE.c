@@ -6,13 +6,9 @@
 #include<string.h>
 
 TableRow* tableRowInit() {
-	printf("TR-1 \n\n");
 	TableRow *tableRow = (TableRow*) malloc(sizeof(TableRow));
 	tableRow->next = NULL;
-	printf("TR-2 \n\n");
 	tableRow->row = initList();
-	printf("TR-3 \n\n");
-
 	return tableRow;
 }
 
@@ -24,106 +20,75 @@ TableRow* tableRowInit() {
 // size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream)
 
 Table* open(char *fileName) {
-	printf("OP-1\n");
 	Table *table = NULL;
 	FILE *filePointer;
-	filePointer = fopen("storage", "r");
+	filePointer = fopen(fileName, "r");
 	if (filePointer == NULL) {
 		printf("storage file failed to open.");
 		printf("OP-ERROR\n");
 	}
 	else {
-		printf("OP-2\n");
+		char dataType[100];
+		unsigned int r, c;
+
 		table = (Table *) malloc(sizeof(Table));
-		printf("OP-2.5\n");
+		table->tableRow = tableRowInit();
 
-		char aa[100];
-		unsigned int a, b;
-		printf("OP-3\n");
+		fscanf(filePointer, "%u %u", &r, &c);  
+		table->rows = r;
+		table->colums = c;
 
-
-		fscanf(filePointer, "%u %u", &a, &b);  
-		table->rows = a;
-		table->colums = b;
-
-		fscanf(filePointer, "%s", aa);
-		printf("OP-4\n");
-		table->columsDataTypes = (char *) malloc(sizeof(char) * strlen(aa));
-		printf("OP-5\n");
-		strcpy(table->columsDataTypes, aa);
-		printf("OP-6\n");
-		
-//		table->tableRow = tableRowInit();
-//		table->tableRow->next = NULL;
-		
+		fscanf(filePointer, "%s", dataType);
+		table->columsDataTypes = (char *) malloc(sizeof(char) * strlen(dataType));
+		strcpy(table->columsDataTypes, dataType);
+				
 		TableRow *tableRow = table->tableRow;
+
 		int firstColum = 1;
-		while(filePointer != NULL) {
-			printf("OP-7\n");
-			tableRow = tableRowInit();
+		r = 0; 
+		while(r <= table->rows) {
 			Node tempNode;
-			printf("OP-8\n");
+			if(tableRow == NULL)
+				tableRow = tableRowInit();
 
 			int colums = 0;
-			while(colums != table->colums) {
-				printf("OP-9\n");
-				if(aa[colums] == 's' || firstColum == 1) {
-					firstColum = 0;
-					fscanf(filePointer, "%s %c %zu", tempNode.data, tempNode.type, tempNode.size);
+			while(colums < table->colums) {
+				if(dataType[colums] == 's' || firstColum == 1) {
+					fscanf(filePointer, "%s %c %zu\n", tempNode.data, &tempNode.type, &tempNode.size);
 				}
-				else if(aa[colums] == 'i') {
-					fscanf(filePointer, "%d %c %zu",  tempNode.data, tempNode.type, tempNode.size);
+				else if(dataType[colums] == 'i') {
+					fscanf(filePointer, "%d %c %zu\n",  tempNode.data, &tempNode.type, &tempNode.size);
 				}
-				else if(aa[colums] == 'c') {
-					fscanf(filePointer, "%c %c %zu",  tempNode.data, tempNode.type, tempNode.size);
+				else if(dataType[colums] == 'c') {
+					fscanf(filePointer, "%c %c %zu\n",  tempNode.data, &tempNode.type, &tempNode.size);
 				}
-				else if(aa[colums] == 'f') {
-					fscanf(filePointer, "%f %c %zu",  tempNode.data, tempNode.type, tempNode.size);
+				else if(dataType[colums] == 'f') {
+					fscanf(filePointer, "%f %c %zu\n",  tempNode.data, &tempNode.type, &tempNode.size);
 				}
-				else if(aa[colums] == 'd') {
-					fscanf(filePointer, "%lf %c %zu", tempNode.data, tempNode.type, tempNode.size);
+				else if(dataType[colums] == 'd') {
+					fscanf(filePointer, "%lf %c %zu\n", tempNode.data, &tempNode.type, &tempNode.size);
 				}
 
-				printf("OP-10\n");				
-				printf("OP-DBUG : Type: %c, %s, %zu\n", tempNode.type, tempNode.data, tempNode.size);
-				insertAtLast(tableRow->row, tempNode.type, tempNode.data, tempNode.size);	
-				printf("OP-11\n");
+				printf("Type: %c, Size: %zu, Data: %s \n\n", tempNode.type, tempNode.size, tempNode.data);
+				insertAtLast(tableRow->row, dataType[colums], tempNode.data, tempNode.size);
 				colums++;
 			}
+			firstColum = 0;
 			tableRow = tableRow->next;
+			r++;
 		}
 		fclose(filePointer);
 	}
 	return table;
 }
 
-void save(Table *table) {
+void save(Table *table, char *fileName) {
 	FILE *filePointer;
-	filePointer = fopen("storage", "w");
+	filePointer = fopen(fileName, "w");
 	if (filePointer == NULL) {
 		printf("storage file failed to open.");
 	}
 	else {
-		/*
-
-		typedef struct Table {
-			TableRow *tableRow;
-			char *columsDataTypes;
-			unsigned int rows;
-			unsigned int colums;
-			
-		}Table;
-
-		typedef struct Node {
-			void *data;
-			char type;
-			size_t size;
-			struct Node *next;
-
-		} Node;
-
-		*/
-
 		fprintf(filePointer, "%u %u\n", table->rows, table->colums);
 		fprintf(filePointer, "%s\n", table->columsDataTypes);
 
@@ -182,19 +147,15 @@ Table* tableInit(const char *dataType, ...) {
 }
 
 void insertRow(Table *table, const char *dataType, ...) {
-//	printf("\n I-P1");
 	if(table == NULL || table->tableRow == NULL) {
-		printf("\n Table is not Initialized ..!!");
-//		printf("\n I-P2");
+		printf("\n Table is not Initialized ..!!\n");
 		return;
 	}
 	else if(strcmp(dataType, table->columsDataTypes)) {
 		printf("\n No Of Colums are not matching ..!!\n");
-//		printf("\n I-P3");
 		return;
 	}
 
-//	printf("\n I-P4");
 	va_list valist;
 	va_start(valist, dataType);
 
@@ -203,12 +164,13 @@ void insertRow(Table *table, const char *dataType, ...) {
 		iterator = iterator->next;
 	}
 
-//	printf("\n I-P5");
+	printf("HHHHHH\n\n");
+
+
 	iterator->next = tableRowInit();
 	iterator->next->next = NULL;
 	table->rows = table->rows + 1;
 
-//	printf("\n I-P6");
 	while(*dataType != '\0') {
 		if(*dataType == 'i') {
 			int val = va_arg(valist, int);
@@ -231,11 +193,8 @@ void insertRow(Table *table, const char *dataType, ...) {
 			insertAtLast(iterator->next->row, *dataType, val, strlen(val));
 		}
 		dataType++;
-//		printf("\n I-PR");
 	}
-//	printf("\n I-P7");
 	va_end(valist);
-//	printf("\n I-P8");
 }
 
 TableRow* getRowFromColum(Table *table, unsigned int index) {
@@ -248,32 +207,35 @@ TableRow* getRowFromColum(Table *table, unsigned int index) {
 }
 
 Node* getNodeFromRow(SLL *list, unsigned int index) {
-//	printf("GN-1 \n\n ");
 	Node *temp = list->head;
-//	printf("GN-2 \n\n ");
 	while(index != 0) {
-//		printf("GN-3 \n\n ");
 		temp = temp->next;
 		index --;
 	}
-//	printf("GN-4 \n\n ");
 	return temp;
 }
 
 void showColum(Table *table, int index) {
-//	printf("SC-1 \n\n ");
 	TableRow *tableRow = table->tableRow->next;
-//	printf("SC-2 \n\n ");
 	while(tableRow != NULL){
-//		printf("SC-3 \n\n ");
 		Node *temp = getNodeFromRow(tableRow->row, index);
-//		printf("SC-4 \n\n ");
 		printBasedOnData(temp->type, temp->data);
-//		printf("SC-5 \n\n ");
 		tableRow = tableRow->next;
-//		printf("SC-6 \n\n ");
 	}
-//	printf("SC-7 \n\n ");
+}
+
+void showRow(Table *table, int index) {
+	TableRow *tableRow = table->tableRow->next;
+	while(index != 0){
+//		printBasedOnData(temp->type, temp->data);
+		index--;
+		tableRow = tableRow->next;
+	}
+
+	if(tableRow != NULL) {
+		Traverse(tableRow->row);
+	}
+
 }
 
 void updateNode(Table *table, const char type, int rowIndex, int colIndex, void *data) {
@@ -295,7 +257,8 @@ void printColums(Table *table) {
 	Node *temp = table->tableRow->row->head;
 	while(temp != NULL) {
 		printString(temp->data);
-		printf("\t");
+		printf("\n");
+		printf("\n");
 		temp = temp->next;
 	}
 }

@@ -15,7 +15,7 @@ typedef struct Table {
 	
 }Table;
 
-void save(Table *table);
+void save(Table *table, char *fileName);
 Table* open(char *fileName);
 
 Table* tableInit(const char *dataType, ...);
@@ -23,6 +23,7 @@ void insertRow(Table *table, const char *dataType, ...);
 Node* getNodeFromRow(SLL *list, unsigned int index);
 TableRow* getRowFromColum(Table *table, unsigned int index);
 void showColum(Table *table, int index);
+void showRow(Table *table, int index);
 void updateNode(Table *table, const char type, int rowIndex, int colIndex, void *data);
 Node* getNode(Table *table, int rowIndex, int colIndex);
 void printColums(Table *table);
