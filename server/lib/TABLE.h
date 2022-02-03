@@ -4,6 +4,7 @@
 typedef struct TableRow {
 	SLL *row;
 	struct TableRow *next;
+	
 }TableRow;
 
 typedef struct Table {
@@ -11,6 +12,7 @@ typedef struct Table {
 	char *columsDataTypes;
 	unsigned int rows;
 	unsigned int colums;
+	
 }Table;
 
 void save(Table *table);

@@ -3,11 +3,13 @@ typedef struct Node {
 	char type;
 	size_t size;
 	struct Node *next;
+
 } Node;
 
 typedef struct SLL {
 	Node *head;
-}SLL;
+
+} SLL;
 
 SLL* initList();
 void insertAtFirst(SLL *list, const char type, void *data, unsigned int n);

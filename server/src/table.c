@@ -6,19 +6,25 @@
 #include<string.h>
 
 int main() {
-	Table *table = tableInit("sii", "Name", "Age", "Phone No");
+	Table *table = tableInit("sii", "Name", "Age", "Phone_No");
 	printColums(table);
 
-	printf("\n\n");
+	printf("\n\n p1");
+
+
+	printf("\n\n p2");
 	insertRow(table, "sii", "Sanskar", 19, 1234567890);
 
-	printf("\n\n");
+	printf("\n\n p3");
 	insertRow(table, "sii", "Shitij", 19, 987654321);
 
-//	showColum(table, 0);
-//	showColum(table, 1);
+	save(table);
+	showColum(table, 0);
+	showColum(table, 1);
 
-	Node *n1 = getNode(table, 1, 0);
+	printf("\n\n p4");
+	
+	Node *n1 = getNode(table, 0, 2);
 	printf("\n N1 : ");
 	printBasedOnData(n1->type, n1->data);
 
@@ -36,7 +42,6 @@ int main() {
 
 //	getNode(table, 0, 0);
 //	getNode(table, 1, 0);
-
 	return 0;
 }
 

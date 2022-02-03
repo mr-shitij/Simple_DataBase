@@ -67,15 +67,15 @@ void insertAtFirst(SLL *list, const char type, void *data, unsigned int n) {
 		printf("\n Overflow ..!!");
 		return;
 	}
-	size_t dataSize = getDataTypeSize(type);
 	newNode->type = type;
-	newNode->size = dataSize;
-	newNode->data = malloc(dataSize * n);
+	newNode->size = getDataTypeSize(type) * n;
+	newNode->data = malloc(newNode->size);
 	newNode->next = NULL;
 
+	printf("\n SIZE_N : %zu \n", getDataTypeSize(type));
 	printf("\n N : %d \n", n);
 
-	assignDataToMemory(type, dataSize, newNode->data, data);
+	assignDataToMemory(type, newNode->size, newNode->data, data);
 	
 	if(list->head == NULL) {
 		list->head = newNode;
@@ -93,13 +93,13 @@ void insertAtLast(SLL *list, const char type, void *data, unsigned int n) { // a
 		printf("\n Overflow ..!!");
 		return;
 	}
-	size_t dataSize = getDataTypeSize(type);
 	newNode->type = type;
-	newNode->size = dataSize;
-	newNode->data = malloc(dataSize * n);
+	newNode->size = getDataTypeSize(type) * n;
+	newNode->data = malloc(newNode->size);
 	newNode->next = NULL;
 
-	assignDataToMemory(type, dataSize, newNode->data, data);
+	printf("\n SIZE_N : %zu \n", getDataTypeSize(type));
+	assignDataToMemory(type, newNode->size, newNode->data, data);
 
 	
 	if(list->head == NULL) {
