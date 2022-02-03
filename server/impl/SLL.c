@@ -72,9 +72,6 @@ void insertAtFirst(SLL *list, const char type, void *data, unsigned int n) {
 	newNode->data = malloc(newNode->size);
 	newNode->next = NULL;
 
-//	printf("\n SIZE_N : %zu \n", getDataTypeSize(type));
-//	printf("\n N : %d \n", n);
-
 	assignDataToMemory(type, newNode->size, newNode->data, data);
 	
 	if(list->head == NULL) {
@@ -98,7 +95,6 @@ void insertAtLast(SLL *list, const char type, void *data, unsigned int n) { // a
 	newNode->data = malloc(newNode->size);
 	newNode->next = NULL;
 
-//	printf("\n SIZE_N : %zu \n", getDataTypeSize(type));
 	assignDataToMemory(type, newNode->size, newNode->data, data);
 
 	
@@ -172,7 +168,6 @@ void printFloat(void *f) {
 void printDouble(void *n) {
 	printf(" %lf", *(double *)n);
 }
-
 
 void printBasedOnData(const char type, void *data) {
 	if(type == 'i') {

@@ -12,12 +12,43 @@ TableRow* tableRowInit() {
 	return tableRow;
 }
 
-// Table{row, col, data_type}
-// struct SLL00, struct Node01(Colum_name), struct Node02(Colum_name), struct Node03(Colum_name)
-// struct SLL10, struct Node11, struct Node12, struct Node13
-// struct SLL20, struct Node21, struct Node22, struct Node23
+void showTable(Table *table) {
+	printColums(table);
+	int rows = table->rows;	
+	int i=0;
+	while(i <= rows) {
+		printf("\n");
+		showRow(table, i);
+		i++;
+	}
 
-// size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream)
+}
+
+void deleteRow(Table *table, int index) {
+	if(table->tableRow->next == NULL) {
+		printf("No Rows ..!!\n\n");
+		return;
+
+	} else if(index > table->rows) {
+		printf("No More Rows ..!!\n\n");
+		return;		
+	}
+
+	TableRow *prev = table->tableRow;
+	TableRow *row = table->tableRow->next;
+	while(index != 0) {
+		index--;
+		prev = row;
+		row = row->next;
+	}
+
+	prev->next = row->next;
+	while(row->row->head != NULL) {
+		removeFromFirst(row->row);
+	}
+	table->rows = table->rows - 1;
+	free(row);
+}
 
 Table* open(char *fileName) {
 	Table *table = NULL;
@@ -38,6 +69,8 @@ Table* open(char *fileName) {
 		table->rows = r;
 		table->colums = c;
 
+		printf("Row : %d, Col : %d\n\n", table->rows, table->colums);
+
 		fscanf(filePointer, "%s", dataType);
 		table->columsDataTypes = (char *) malloc(sizeof(char) * strlen(dataType));
 		strcpy(table->columsDataTypes, dataType);
@@ -57,19 +90,19 @@ Table* open(char *fileName) {
 					fscanf(filePointer, "%s %c %zu\n", tempNode.data, &tempNode.type, &tempNode.size);
 				}
 				else if(dataType[colums] == 'i') {
-					fscanf(filePointer, "%d %c %zu\n",  tempNode.data, &tempNode.type, &tempNode.size);
+					fscanf(filePointer, "%d %c %zu\n", tempNode.data, &tempNode.type, &tempNode.size);
 				}
 				else if(dataType[colums] == 'c') {
-					fscanf(filePointer, "%c %c %zu\n",  tempNode.data, &tempNode.type, &tempNode.size);
+					fscanf(filePointer, "%c %c %zu\n", tempNode.data, &tempNode.type, &tempNode.size);
 				}
 				else if(dataType[colums] == 'f') {
-					fscanf(filePointer, "%f %c %zu\n",  tempNode.data, &tempNode.type, &tempNode.size);
+					fscanf(filePointer, "%f %c %zu\n", tempNode.data, &tempNode.type, &tempNode.size);
 				}
 				else if(dataType[colums] == 'd') {
 					fscanf(filePointer, "%lf %c %zu\n", tempNode.data, &tempNode.type, &tempNode.size);
 				}
 
-				printf("Type: %c, Size: %zu, Data: %s \n\n", tempNode.type, tempNode.size, tempNode.data);
+			//	printf("Type: %c, Size: %zu, Data: %s \n\n", tempNode.type, tempNode.size, tempNode.data);
 				insertAtLast(tableRow->row, dataType[colums], tempNode.data, tempNode.size);
 				colums++;
 			}
@@ -164,9 +197,6 @@ void insertRow(Table *table, const char *dataType, ...) {
 		iterator = iterator->next;
 	}
 
-	printf("HHHHHH\n\n");
-
-
 	iterator->next = tableRowInit();
 	iterator->next->next = NULL;
 	table->rows = table->rows + 1;
@@ -227,7 +257,6 @@ void showColum(Table *table, int index) {
 void showRow(Table *table, int index) {
 	TableRow *tableRow = table->tableRow->next;
 	while(index != 0){
-//		printBasedOnData(temp->type, temp->data);
 		index--;
 		tableRow = tableRow->next;
 	}
@@ -257,8 +286,7 @@ void printColums(Table *table) {
 	Node *temp = table->tableRow->row->head;
 	while(temp != NULL) {
 		printString(temp->data);
-		printf("\n");
-		printf("\n");
+		printf("\t");
 		temp = temp->next;
 	}
 }

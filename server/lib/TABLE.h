@@ -15,6 +15,9 @@ typedef struct Table {
 	
 }Table;
 
+void showTable(Table *table);
+void deleteRow(Table *table, int index);
+
 void save(Table *table, char *fileName);
 Table* open(char *fileName);
 

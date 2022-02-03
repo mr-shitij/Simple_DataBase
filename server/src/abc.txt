@@ -3,9 +3,9 @@ sii
 Name s 4
 Age i 12
 Phone_No i 32
-RAM1 s 4
+RAM2 s 4
 199 i 4
 1234567890 i 4
-SHAM1 s 5
+SHAM2 s 5
 199 i 4
 987654321 i 4

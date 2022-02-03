@@ -5,31 +5,36 @@
 #include<stdarg.h>
 #include<string.h>
 
-//
+//open("abc.txt");
 
 int main() {
-	printf("p1\n\n");
-	Table *table = open("abc.txt");//tableInit("sii", "Name", "Age", "Phone_No");
-	printf("p2\n\n");
+//	printf("p1\n\n");
+	Table *table = tableInit("sids", "Name", "Age", "Heart Rate", "Blood Group");
+//	printf("p2\n\n");
 
-	if(table->tableRow == NULL)
-		printf("Table_ROWS : \n\n");
-	if(table->tableRow->row == NULL)
-		printf("Table_ROWS->row : \n\n");
+//	if(table->tableRow == NULL)
+//		printf("Table_ROWS : \n\n");
+//	if(table->tableRow->row == NULL)
+//		printf("Table_ROWS->row : \n\n");
 
-	printColums(table);
+//	printColums(table);
 
-//	insertRow(table, "sii", "RAM2", 199, 1234567890);
-//	insertRow(table, "sii", "SHAM2", 199, 987654321);
+	insertRow(table, "sids", "Shitij", 19, 100.100, "+A");
+	insertRow(table, "sids", "Sanskar", 19, 100.100, "-O");
 
-	printf("p3\n\n");
-	showRow(table, 0);
-	printf("p4\n\n");
-	showRow(table, 1);
-	printf("p5\n\n");
 
-	showRow(table, 2);
-	printf("p6\n\n");
+
+	deleteRow(table, 1);
+
+
+
+//	showRow(table, 0);
+	showTable(table);
+//	showRow(table, 1);
+//	printf("p5\n\n");
+
+//	showRow(table, 2);
+//	printf("p6\n\n");
 //	showRow(table, 3);
 //	printf("p7\n\n");
 
