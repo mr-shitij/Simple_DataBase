@@ -146,11 +146,11 @@ void removeFromFirst(SLL *list) {
 }
 
 void printInt(void *n) {
-	printf(" %d", *(int *)n);
+	printf("\t%d", *(int *)n);
 }
 
 void printChar(void *n) {
-	printf(" %c", *(char *)n);
+	printf("\t%c", *(char *)n);
 }
  
 void printString(void *n) {
@@ -159,14 +159,15 @@ void printString(void *n) {
 		printf("%c", *ptr);
 		ptr++;
 	}
+	printf("\t");
 }
  
 void printFloat(void *f) {
-	printf(" %f", *(float *)f);
+	printf("\t%f", *(float *)f);
 }
 
 void printDouble(void *n) {
-	printf(" %lf", *(double *)n);
+	printf("\t%lf", *(double *)n);
 }
 
 void printBasedOnData(const char type, void *data) {

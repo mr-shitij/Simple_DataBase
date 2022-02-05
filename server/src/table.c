@@ -8,23 +8,22 @@
 //open("abc.txt");
 
 int main() {
-//	printf("p1\n\n");
-	Table *table = tableInit("sids", "Name", "Age", "Heart Rate", "Blood Group");
-//	printf("p2\n\n");
-
-//	if(table->tableRow == NULL)
-//		printf("Table_ROWS : \n\n");
-//	if(table->tableRow->row == NULL)
-//		printf("Table_ROWS->row : \n\n");
+	Table *table = open("abc.txt");
+//	Table *table = tableInit("sids", "Name", "Age", "Heart Rate", "Blood Group");
 
 //	printColums(table);
 
+//	showTable(table);
+
+/*
 	insertRow(table, "sids", "Shitij", 19, 100.100, "+A");
 	insertRow(table, "sids", "Sanskar", 19, 100.100, "-O");
+	save(table, "abc.txt");
+*/
+	//Node *n1 = getNode(table, 0, 0);
+	//printBasedOnData(n1->type, n1->data);
 
-
-
-	deleteRow(table, 1);
+//	deleteRow(table, 0);
 
 
 

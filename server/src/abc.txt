@@ -1,11 +1,1 @@
-2 3
-sii
-Name s 4
-Age i 12
-Phone_No i 32
-RAM2 s 4
-199 i 4
-1234567890 i 4
-SHAM2 s 5
-199 i 4
-987654321 i 4
+2	4	sids	4	s	Name	12	i	Age	80	d	Heart Rate	11	s	Blood Group	6	s	Shitij	4	i	19	8	d	100.100000	2	s	+A	7	s	Sanskar	4	i	19	8	d	100.100000	2	s	-O	

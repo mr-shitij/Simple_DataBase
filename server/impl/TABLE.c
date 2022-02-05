@@ -14,14 +14,14 @@ TableRow* tableRowInit() {
 
 void showTable(Table *table) {
 	printColums(table);
-	int rows = table->rows;	
+	printf("\n");
+	int rows = table->rows;
 	int i=0;
 	while(i <= rows) {
-		printf("\n");
 		showRow(table, i);
+		printf("\n");
 		i++;
 	}
-
 }
 
 void deleteRow(Table *table, int index) {
@@ -59,56 +59,88 @@ Table* open(char *fileName) {
 		printf("OP-ERROR\n");
 	}
 	else {
-		char dataType[100];
-		unsigned int r, c;
-
 		table = (Table *) malloc(sizeof(Table));
 		table->tableRow = tableRowInit();
 
-		fscanf(filePointer, "%u %u", &r, &c);  
-		table->rows = r;
-		table->colums = c;
+		fscanf(filePointer, "%u", &table->rows);
+		fscanf(filePointer, "%u", &table->colums);
+		table->columsDataTypes = (char *) malloc(sizeof(char) * table->colums);
+		fscanf(filePointer, " %[^\t\n]s", table->columsDataTypes);
 
-		printf("Row : %d, Col : %d\n\n", table->rows, table->colums);
+//		printf("Row : %d, Col : %d, DataType : %s\n\n", table->rows, table->colums, table->columsDataTypes);
 
-		fscanf(filePointer, "%s", dataType);
-		table->columsDataTypes = (char *) malloc(sizeof(char) * strlen(dataType));
-		strcpy(table->columsDataTypes, dataType);
-				
 		TableRow *tableRow = table->tableRow;
 
 		int firstColum = 1;
-		r = 0; 
+		int r = 0; 
 		while(r <= table->rows) {
-			Node tempNode;
-			if(tableRow == NULL)
-				tableRow = tableRowInit();
 
 			int colums = 0;
 			while(colums < table->colums) {
-				if(dataType[colums] == 's' || firstColum == 1) {
-					fscanf(filePointer, "%s %c %zu\n", tempNode.data, &tempNode.type, &tempNode.size);
+				Node tempNode;
+				char data[100];
+
+				fscanf(filePointer, "%zu", &tempNode.size);
+				fscanf(filePointer, "%zu", &tempNode.size);
+				fscanf(filePointer, "%c", &tempNode.type);
+//				printf("Type: %c, Size: %zu, Data : ", tempNode.type, tempNode.size, tempNode.data);
+
+				if(*(table->columsDataTypes + colums) == 's' || firstColum == 1) {
+					fscanf(filePointer, " %[^\t\n]s", data);
+					tempNode.data = malloc(sizeof(char) * strlen(data));
+					strcpy(tempNode.data, data);
+	
+//					printBasedOnData('s', tempNode.data);
+//					printf("\n\n");
+
+					insertAtLast(tableRow->row, *(table->columsDataTypes + colums), tempNode.data, tempNode.size);
 				}
-				else if(dataType[colums] == 'i') {
-					fscanf(filePointer, "%d %c %zu\n", tempNode.data, &tempNode.type, &tempNode.size);
+				else if(*(table->columsDataTypes + colums) == 'i') {
+					int integ;
+					fscanf(filePointer, "%d", &integ);
+
+//					printBasedOnData(tempNode.type, &integ);
+//					printf("\n\n");
+
+					insertAtLast(tableRow->row, *(table->columsDataTypes + colums), &integ, tempNode.size);
 				}
-				else if(dataType[colums] == 'c') {
-					fscanf(filePointer, "%c %c %zu\n", tempNode.data, &tempNode.type, &tempNode.size);
+				else if(*(table->columsDataTypes + colums) == 'c') {
+					char ch;
+					fscanf(filePointer, "%c", &ch);
+
+//					printBasedOnData(tempNode.type, &ch);
+//					printf("\n\n");
+
+					insertAtLast(tableRow->row, *(table->columsDataTypes + colums), &ch, tempNode.size);
 				}
-				else if(dataType[colums] == 'f') {
-					fscanf(filePointer, "%f %c %zu\n", tempNode.data, &tempNode.type, &tempNode.size);
+				else if(*(table->columsDataTypes + colums) == 'f') {
+					float fl;
+					fscanf(filePointer, "%f", &fl);
+
+//					printBasedOnData(tempNode.type, &fl);
+//					printf("\n\n");
+
+					insertAtLast(tableRow->row, *(table->columsDataTypes + colums), &fl, tempNode.size);
 				}
-				else if(dataType[colums] == 'd') {
-					fscanf(filePointer, "%lf %c %zu\n", tempNode.data, &tempNode.type, &tempNode.size);
+				else if(*(table->columsDataTypes + colums) == 'd') {
+					double dl;
+					fscanf(filePointer, "%lf", &dl);
+
+//					printBasedOnData(tempNode.type, &dl);
+//					printf("\n\n");
+
+					insertAtLast(tableRow->row, *(table->columsDataTypes + colums), &dl, tempNode.size);
 				}
 
-			//	printf("Type: %c, Size: %zu, Data: %s \n\n", tempNode.type, tempNode.size, tempNode.data);
-				insertAtLast(tableRow->row, dataType[colums], tempNode.data, tempNode.size);
 				colums++;
 			}
 			firstColum = 0;
-			tableRow = tableRow->next;
 			r++;
+			if(r <= table->rows) {
+				tableRow->next = tableRowInit();
+				tableRow = tableRow->next;
+			}
+
 		}
 		fclose(filePointer);
 	}
@@ -122,8 +154,9 @@ void save(Table *table, char *fileName) {
 		printf("storage file failed to open.");
 	}
 	else {
-		fprintf(filePointer, "%u %u\n", table->rows, table->colums);
-		fprintf(filePointer, "%s\n", table->columsDataTypes);
+		fprintf(filePointer, "%u\t", table->rows);
+		fprintf(filePointer, "%u\t", table->colums);
+		fprintf(filePointer, "%s\t", table->columsDataTypes);
 
 		TableRow *row = NULL;
 		row = table->tableRow;
@@ -132,21 +165,23 @@ void save(Table *table, char *fileName) {
 		while(row != NULL) {
 			Node *node = row->row->head;
 			while(node != NULL) {
+				fprintf(filePointer, "%zu\t", node->size);
+				fprintf(filePointer, "%c\t", node->type);
 				if(node->type == 's' || first < table->colums) {
 					first++;
-					fprintf(filePointer, "%s %c %zu\n", node->data, node->type, node->size);
+					fprintf(filePointer, "%s\t", node->data);
 				}
 				else if(node->type == 'i') {
-					fprintf(filePointer, "%d %c %zu\n",  *(int *)node->data, node->type, node->size);
+					fprintf(filePointer, "%d\t", *(int *)node->data);
 				}
 				else if(node->type == 'c') {
-					fprintf(filePointer, "%c %c %zu\n",  *(char *)node->data, node->type, node->size);
+					fprintf(filePointer, "%c\t", *(char *)node->data);
 				}
 				else if(node->type == 'f') {
-					fprintf(filePointer, "%f %c %zu\n",  *(float *)node->data, node->type, node->size);
+					fprintf(filePointer, "%f\t", *(float *)node->data);
 				}
 				else if(node->type == 'd') {
-					fprintf(filePointer, "%lf %c %zu\n",  *(double *)node->data, node->type, node->size);
+					fprintf(filePointer, "%lf\t",  *(double *)node->data);
 				}
 				node = node->next;
 			}
@@ -264,7 +299,6 @@ void showRow(Table *table, int index) {
 	if(tableRow != NULL) {
 		Traverse(tableRow->row);
 	}
-
 }
 
 void updateNode(Table *table, const char type, int rowIndex, int colIndex, void *data) {
