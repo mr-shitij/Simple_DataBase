@@ -69,7 +69,7 @@ void insertAtFirst(SLL *list, const char type, void *data, unsigned int n) {
 	}
 	newNode->type = type;
 	newNode->size = getDataTypeSize(type) * n;
-	newNode->data = malloc(newNode->size);
+	newNode->data = (void *)malloc(newNode->size);
 	newNode->next = NULL;
 
 	assignDataToMemory(type, newNode->size, newNode->data, data);
@@ -92,11 +92,10 @@ void insertAtLast(SLL *list, const char type, void *data, unsigned int n) { // a
 	}
 	newNode->type = type;
 	newNode->size = getDataTypeSize(type) * n;
-	newNode->data = malloc(newNode->size);
+	newNode->data = (void *)malloc(newNode->size);
 	newNode->next = NULL;
 
 	assignDataToMemory(type, newNode->size, newNode->data, data);
-
 	
 	if(list->head == NULL) {
 		list->head = newNode;
@@ -146,11 +145,11 @@ void removeFromFirst(SLL *list) {
 }
 
 void printInt(void *n) {
-	printf("\t%d", *(int *)n);
+	printf("%d", *(int *)n);
 }
 
 void printChar(void *n) {
-	printf("\t%c", *(char *)n);
+	printf("%c", *(char *)n);
 }
  
 void printString(void *n) {
@@ -159,15 +158,14 @@ void printString(void *n) {
 		printf("%c", *ptr);
 		ptr++;
 	}
-	printf("\t");
 }
  
 void printFloat(void *f) {
-	printf("\t%f", *(float *)f);
+	printf("%f", *(float *)f);
 }
 
 void printDouble(void *n) {
-	printf("\t%lf", *(double *)n);
+	printf("%lf", *(double *)n);
 }
 
 void printBasedOnData(const char type, void *data) {
@@ -192,6 +190,7 @@ void Traverse(SLL *list) {
 	Node *temp = list->head;
 	while(temp != NULL) {
 		printBasedOnData(temp->type, temp->data);
+		printf("\t");
 		temp = temp->next;
 	}	
 }

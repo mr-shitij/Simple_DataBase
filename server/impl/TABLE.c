@@ -53,7 +53,7 @@ void deleteRow(Table *table, int index) {
 Table* open(char *fileName) {
 	Table *table = NULL;
 	FILE *filePointer;
-	filePointer = fopen(fileName, "r");
+	filePointer = fopen(fileName, "rb");
 	if (filePointer == NULL) {
 		printf("storage file failed to open.");
 		printf("OP-ERROR\n");
@@ -86,7 +86,7 @@ Table* open(char *fileName) {
 //				printf("Type: %c, Size: %zu, Data : ", tempNode.type, tempNode.size, tempNode.data);
 
 				if(*(table->columsDataTypes + colums) == 's' || firstColum == 1) {
-					fscanf(filePointer, " %[^\t\n]s", data);
+					fscanf(filePointer, " %[^\t]s", data);
 					tempNode.data = malloc(sizeof(char) * strlen(data));
 					strcpy(tempNode.data, data);
 	
@@ -149,7 +149,7 @@ Table* open(char *fileName) {
 
 void save(Table *table, char *fileName) {
 	FILE *filePointer;
-	filePointer = fopen(fileName, "w");
+	filePointer = fopen(fileName, "wb");
 	if (filePointer == NULL) {
 		printf("storage file failed to open.");
 	}
@@ -285,6 +285,7 @@ void showColum(Table *table, int index) {
 	while(tableRow != NULL){
 		Node *temp = getNodeFromRow(tableRow->row, index);
 		printBasedOnData(temp->type, temp->data);
+		printf("\n");
 		tableRow = tableRow->next;
 	}
 }
